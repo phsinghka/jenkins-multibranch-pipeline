@@ -2,7 +2,7 @@ pipeline {
     agent any 
 
     environment  {
-        DOCKER_IMAGE = "phsinghka/baristaimage"
+        DOCKER_IMAGE = "phsinghka/jenkins-multibranch-node-app"
         CREDENTIALS_ID = 'docker-hub-credentials'
     }
 
@@ -27,7 +27,7 @@ pipeline {
             }
 
             // Construct the shell command properly
-            def dockerBuildCommand = "docker build -t ${DOCKER_IMAGE}:${env.BRANCH_NAME} ."
+            def dockerBuildCommand = "docker build -t ${DOCKER_IMAGE}:${env.BRANCH_NAME} ./node-app"
             echo "Running: ${dockerBuildCommand}"
             sh dockerBuildCommand
         }
