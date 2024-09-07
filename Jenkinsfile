@@ -13,22 +13,27 @@ pipeline {
             }
         }
 
-        stage ('Build') {
-            steps {
-                script {
-                    if(env.BRANCH_NAME == 'dev'){
-                        echo 'Building for Development Environment'
-                    }
-                    else if (env.BRANCH_NAME == 'staging') {
-                        echo 'Building for Staging Environment'
-                    }
-                    else if (env.BRANCH_NAME == 'prod') {
-                        echo 'Building for Production Environment'
-                    }
-                    sh 'bash -c "docker build -t ${DOCKER_IMAGE}:${env.BRANCH_NAME}"'
-                }
+        stage('Build') {
+    steps {
+        script {
+            if(env.BRANCH_NAME == 'dev'){
+                echo 'Building for Development Environment'
             }
+            else if (env.BRANCH_NAME == 'staging') {
+                echo 'Building for Staging Environment'
+            }
+            else if (env.BRANCH_NAME == 'prod') {
+                echo 'Building for Production Environment'
+            }
+
+            // Construct the shell command properly
+            def dockerBuildCommand = "docker build -t ${DOCKER_IMAGE}:${env.BRANCH_NAME} ."
+            echo "Running: ${dockerBuildCommand}"
+            sh dockerBuildCommand
         }
+    }
+}
+
 
         stage ('Test') {
             steps {
