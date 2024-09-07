@@ -17,7 +17,7 @@ pipeline {
     steps {
         script {
             if(env.BRANCH_NAME == 'dev'){
-                echo 'Building for Development Environment'
+                echo 'Building for Development Environment.'
             }
             else if (env.BRANCH_NAME == 'staging') {
                 echo 'Building for Staging Environment'
