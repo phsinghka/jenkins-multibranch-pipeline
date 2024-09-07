@@ -25,7 +25,7 @@ pipeline {
                     else if (env.BRANCH_NAME == 'prod') {
                         echo 'Building for Production Environment'
                     }
-                    sh 'docker build -t ${DOCKER_IMAGE}:${env.BRANCH_NAME}'
+                    sh 'bash -c "docker build -t ${DOCKER_IMAGE}:${env.BRANCH_NAME}"'
                 }
             }
         }
