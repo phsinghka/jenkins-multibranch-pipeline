@@ -25,11 +25,8 @@ pipeline {
             else if (env.BRANCH_NAME == 'prod') {
                 echo 'Building for Production Environment'
             }
-
-            // Construct the shell command properly
-            def dockerBuildCommand = "docker build -t ${DOCKER_IMAGE}:${env.BRANCH_NAME} ./node-app"
-            echo "Running: ${dockerBuildCommand}"
-            sh dockerBuildCommand
+            
+            sh "docker build -t ${DOCKER_IMAGE}:${env.BRANCH_NAME} ./node-app"
         }
     }
 }
@@ -73,21 +70,21 @@ pipeline {
     }
 
     post {
-        always {
-            mail    to: 'phsinghka@gmail.com',
-                    subject: "Jenkins Pipeline: ${currentBuild.fullDisplayName}",
-                    body: "Build ${currentBuild.result}: ${env.BUILD_URL}"
-        }
+        // always {
+        //     mail    to: 'phsinghka@gmail.com',
+        //             subject: "Jenkins Pipeline: ${currentBuild.fullDisplayName}",
+        //             body: "Build ${currentBuild.result}: ${env.BUILD_URL}"
+        // }
         success {
-        slackSend channel: '#devops',
-                  color: 'good',
-                  message: "Build succeeded: ${env.JOB_NAME} - ${env.BUILD_NUMBER}\n${env.BUILD_URL}"
-    }
-    failure {
-        slackSend channel: '#devops',
-                  color: 'danger',
-                  message: "Build failed: ${env.JOB_NAME} - ${env.BUILD_NUMBER}\n${env.BUILD_URL}"
-    }
+            slackSend channel: '#devops',
+                    color: 'good',
+                    message: "Build succeeded: ${env.JOB_NAME} - ${env.BUILD_NUMBER}\n${env.BUILD_URL}"
+        }
+        failure {
+            slackSend channel: '#devops',
+                    color: 'danger',
+                    message: "Build failed: ${env.JOB_NAME} - ${env.BUILD_NUMBER}\n${env.BUILD_URL}"
+        }
 
 
     }
